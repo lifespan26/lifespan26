@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifespan — Days Lived Calculator</title>
+    <meta name="description" content="Discover how many days you've lived with our beautiful lifespan calculator. Get insights into your time on Earth.">
+    <meta name="keywords" content="days lived, lifespan calculator, age calculator, time tracker">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta property="og:title" content="Lifespan — Days Lived Calculator">
+    <meta property="og:description" content="Discover how many days you've lived with our beautiful lifespan calculator.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://ranmikakalhan.github.io/og-image.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏳</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+                :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-light: #1a1a25;
+            --text: #e8e8f0;
+            --text-dim: #6b6b7b;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.3);
+            --accent2: #ec4899;
+            --accent3: #06b6d4;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f5f7;
+            --surface: #ffffff;
+            --surface-light: #f0f0f5;
+            --text: #1a1a2e;
+            --text-dim: #6b6b7b;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.2);
+            --accent2: #ec4899;
+            --accent3: #06b6d4;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+        /* Theme Toggle */
+        .theme-toggle {
+            
+            width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    backdrop-filter: blur(10px);
+    flex-shrink: 0;
+        }
+
+        [data-theme="light"] .theme-toggle {
+            border-color: rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px var(--accent-glow);
+        }
+
+        /* Adjustments for light mode */
+        [data-theme="light"] .hero h1 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #4a4a6a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        [data-theme="light"] .contact-header h2,
+        [data-theme="light"] .progress-title,
+        [data-theme="light"] .section-title,
+        [data-theme="light"] .zodiac-name {
+            background: linear-gradient(135deg, #1a1a2e 0%, #4a4a6a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        [data-theme="light"] .noise-overlay {
+            opacity: 0.02;
+        }
+
+        [data-theme="light"] .grid-lines {
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+        }
+
+        [data-theme="light"] .input-card::before,
+        [data-theme="light"] .zodiac-section::before,
+        [data-theme="light"] .progress-section::before {
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        [data-theme="light"] .fact-number,
+        [data-theme="light"] .zodiac-trait {
+            color: var(--accent);
+        }
+
+        [data-theme="light"] .contact-icon {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-animation .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent);
+            top: -10%;
+            left: -5%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent2);
+            top: 40%;
+            right: -10%;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent3);
+            bottom: -10%;
+            left: 30%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.1); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 10px) scale(1.05); }
+        }
+
+        /* Noise Texture Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Grid Lines Background */
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* Navbar — Pill Style */
+        .navbar {
+            position: fixed;
+            top: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            padding: 0.6rem 0.6rem 0.6rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            background: rgba(18, 18, 26, 0.85);
+            backdrop-filter: blur(20px) saturate(1.5);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 100px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+       [data-theme="light"] .navbar {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .nav-links {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0,0,0,0.08);
+}
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-links a.creator-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 0.5rem 1.2rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .nav-links a.creator-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Mobile Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            padding: 0.5rem;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            padding-top: 120px;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem 2.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #a5a5b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Input Section */
+        .input-section {
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .input-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .input-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5), transparent);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .date-input-wrapper {
+            position: relative;
+        }
+
+        .date-input-wrapper input[type="date"] {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: var(--surface-light);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .date-input-wrapper input[type="date"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .date-input-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.6);
+            cursor: pointer;
+        }
+
+        .error-msg {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+            padding: 0.7rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            color: var(--error);
+            font-size: 0.85rem;
+            animation: shake 0.5s ease;
+        }
+
+        .error-msg.show {
+            display: flex;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .calculate-btn:hover::before {
+            left: 100%;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Developer Card */
+        .dev-card {
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .dev-card-inner {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(236, 72, 153, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .dev-card-inner:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .dev-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .dev-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .dev-info p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .dev-arrow {
+            margin-left: auto;
+            color: var(--text-dim);
+            transition: transform 0.3s ease;
+        }
+
+        .dev-card-inner:hover .dev-arrow {
+            transform: translateX(4px);
+            color: var(--accent);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            padding: 0 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .results-section.active {
+            display: block;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Main Counter */
+        .main-counter {
+            text-align: center;
+            padding: 3rem 2rem;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .main-counter::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .counter-label {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .counter-value {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            letter-spacing: -2px;
+            position: relative;
+            text-shadow: 0 0 60px var(--accent-glow);
+        }
+
+        .counter-value::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            border-radius: 3px;
+        }
+
+        .counter-unit {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-top: 1.5rem;
+            font-weight: 500;
+        }
+
+        .counter-sub {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 0.4rem;
+            opacity: 0.7;
+        }
+
+        /* Quick Stats Row */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            padding: 0 1rem;
+        }
+
+        .quick-stat {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 1.2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        .quick-stat.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quick-stat:hover {
+            border-color: rgba(99, 102, 241, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .quick-stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .quick-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 1.8rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card:hover {
+            border-color: rgba(99, 102, 241, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent), var(--accent2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.purple { background: rgba(99, 102, 241, 0.15); }
+        .stat-icon.pink { background: rgba(236, 72, 153, 0.15); }
+        .stat-icon.cyan { background: rgba(6, 182, 212, 0.15); }
+        .stat-icon.green { background: rgba(34, 197, 94, 0.15); }
+        .stat-icon.orange { background: rgba(245, 158, 11, 0.15); }
+        .stat-icon.red { background: rgba(239, 68, 68, 0.15); }
+        .stat-icon.yellow { background: rgba(234, 179, 8, 0.15); }
+        .stat-icon.indigo { background: rgba(99, 102, 241, 0.15); }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            line-height: 1.4;
+        }
+
+        /* Zodiac Section */
+        .zodiac-section {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zodiac-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent2), transparent);
+        }
+
+        .zodiac-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .zodiac-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .zodiac-dates {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 0.8rem;
+        }
+
+        .zodiac-explain {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            max-width: 500px;
+            margin: 0 auto 1rem;
+            line-height: 1.6;
+        }
+
+        .zodiac-traits {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .zodiac-trait {
+            padding: 0.4rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .progress-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .progress-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .life-bar-container {
+            position: relative;
+            height: 24px;
+            background: var(--surface-light);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .life-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+            border-radius: 12px;
+            width: 0%;
+            transition: width 2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .life-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 40px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+            border-radius: 0 12px 12px 0;
+        }
+
+        .life-bar-shine {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            height: 8px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.2), transparent);
+            border-radius: 10px 10px 0 0;
+        }
+
+        .milestones {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .milestone {
+            text-align: center;
+            position: relative;
+        }
+
+        .milestone-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--surface-light);
+            border: 2px solid var(--text-dim);
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .milestone-dot.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .milestone-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        /* Fun Facts */
+        .fun-facts {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .fact-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        .fact-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fact-card:hover {
+            border-color: rgba(99, 102, 241, 0.15);
+            transform: translateX(5px);
+        }
+
+        .fact-emoji {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .fact-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .fact-content p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .fact-number {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .contact-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #a5a5b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .contact-header p {
+            font-size: 1rem;
+            color: var(--text-dim);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: rgba(99, 102, 241, 0.2);
+            transform: translateX(5px);
+        }
+
+        .contact-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(236, 72, 153, 0.15));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-detail h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-detail a,
+        .contact-detail p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-detail a:hover {
+            color: var(--accent);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dim);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.9rem 1rem;
+            background: var(--surface-light);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-dim);
+            opacity: 0.6;
+        }
+
+        .contact-submit {
+            padding: 0.9rem 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .contact-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .contact-submit:active {
+            transform: translateY(0);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 100px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: var(--surface);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+            border-color: rgba(99, 102, 241, 0.3);
+            background: var(--surface-light);
+        }
+
+        .footer-links a.creator-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .footer-links a.creator-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .footer-heart {
+            color: var(--accent2);
+            animation: heartbeat 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--surface-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-dim);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                top: 0.8rem;
+                padding: 0.5rem 0.5rem 0.5rem 1rem;
+                gap: 1rem;
+                width: calc(100% - 2rem);
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: calc(100% + 0.5rem);
+                right: 0;
+                background: rgba(18, 18, 26, 0.95);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255,255,255,0.08);
+                border-radius: 16px;
+                padding: 0.8rem;
+                flex-direction: column;
+                gap: 0.3rem;
+                min-width: 160px;
+            }
+            .nav-links.show {
+                display: flex;
+            }
+            .nav-links a {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hero {
+                padding: 3rem 1.5rem 2rem;
+            }
+            .input-section {
+                padding: 0 1.5rem;
+            }
+            .results-section {
+                padding: 0 1rem 3rem;
+            }
+            .progress-section {
+                padding: 1.8rem;
+            }
+            .main-counter::before {
+                width: 250px;
+                height: 250px;
+            }
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .contact-section {
+                padding: 0 1rem;
+            }
+        }
+                /* Live Counter Badge */
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .live-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body id='top'>
+    <!-- Background Effects -->
+    <div class="bg-animation">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="noise-overlay"></div>
+    <div class="grid-lines"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">⏳</div>
+            <span>Lifespan</span>
+        </div>
+        <button class="hamburger" onclick="toggleNav()" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#top" onclick="closeNav()">Home</a></li>
+            <li><a href="#footer" onclick="closeNav()">Contact</a></li>
+            <li><a href="https://ranmikakalhan.github.io" target="_blank" class="creator-btn" onclick="closeNav()">Creator</a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+</button>
+    </nav>
+    <!-- Theme Toggle -->
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-badge">
+                <span>✨</span>
+                <span>Discover Your Journey</span>
+            </div>
+            <h1>How Many Days<br>Have You Lived?</h1>
+            <p>Enter your birth date and unlock a fascinating breakdown of your time on Earth — every day, every hour, every heartbeat.</p>
+        </section>
+
+        <!-- Input -->
+        <section class="input-section">
+            <div class="input-card">
+                <div class="input-group">
+                    <label for="dob">Date of Birth</label>
+                    <div class="date-input-wrapper">
+                        <input type="date" id="dob" max="" aria-label="Enter your date of birth">
+                    </div>
+                    <div class="error-msg" id="error-msg">
+                        <span>⚠️</span>
+                        <span>Please enter a valid date of birth.</span>
+                    </div>
+                </div>
+                <button class="calculate-btn" onclick="calculateLifespan()">
+                    Calculate My Lifespan
+                </button>
+            </div>
+        </section>
+
+        <!-- Developer Card -->
+        <div class="dev-card">
+            <a href="https://ranmikakalhan.github.io" target="_blank" class="dev-card-inner">
+                <div class="dev-avatar">👨‍💻</div>
+                <div class="dev-info">
+                    <h4>Meet the Developer</h4>
+                    <p>Ranmika Kalhan — Creative Developer from Sri Lanka</p>
+                </div>
+                <div class="dev-arrow">→</div>
+            </a>
+        </div>
+
+        <!-- Results -->
+        <section class="results-section" id="results">
+            <!-- Main Counter -->
+            <div class="main-counter">
+                <div class="live-badge"><span>●</span> Live</div>
+                <div class="counter-label">Days Lived</div>
+                <div class="counter-value" id="days-counter">0</div>
+                <div class="counter-unit">days and counting</div>
+                <div class="counter-sub" id="exact-age">0 years, 0 months, 0 days</div>
+            </div>
+
+            <!-- Quick Stats Row -->
+            <div class="quick-stats" id="quick-stats">
+                <div class="quick-stat">
+                    <div class="quick-stat-value" id="qs-years">0</div>
+                    <div class="quick-stat-label">Years</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value" id="qs-months">0</div>
+                    <div class="quick-stat-label">Months</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value" id="qs-weeks">0</div>
+                    <div class="quick-stat-label">Weeks</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value" id="qs-hours">0</div>
+                    <div class="quick-stat-label">Hours</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value" id="qs-minutes">0</div>
+                    <div class="quick-stat-label">Minutes</div>
+                </div>
+            </div>
+
+            <!-- Zodiac Section -->
+            <div class="zodiac-section" id="zodiac-section">
+                <div class="zodiac-icon" id="zodiac-icon">♈</div>
+                <div class="zodiac-name" id="zodiac-name">Aries</div>
+                <div class="zodiac-dates" id="zodiac-dates">March 21 — April 19</div>
+                <div class="zodiac-explain" id="zodiac-explain">
+                    Your zodiac sign is determined by the position of the sun at the time of your birth. 
+                    Ancient astronomers divided the sky into 12 constellations, each representing different personality traits and cosmic energies.
+                </div>
+                <div class="zodiac-traits" id="zodiac-traits">
+                    <span class="zodiac-trait">Passionate</span>
+                    <span class="zodiac-trait">Courageous</span>
+                    <span class="zodiac-trait">Determined</span>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon purple">📅</div>
+                    <div class="stat-label">Years</div>
+                    <div class="stat-value" id="years-val">0</div>
+                    <div class="stat-desc">Full years completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pink">🌙</div>
+                    <div class="stat-label">Months</div>
+                    <div class="stat-value" id="months-val">0</div>
+                    <div class="stat-desc">Total months lived</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon cyan">⏰</div>
+                    <div class="stat-label">Hours</div>
+                    <div class="stat-value" id="hours-val">0</div>
+                    <div class="stat-desc">Hours spent on Earth</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">⏱️</div>
+                    <div class="stat-label">Minutes</div>
+                    <div class="stat-value" id="minutes-val">0</div>
+                    <div class="stat-desc">Minutes of existence</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">💓</div>
+                    <div class="stat-label">Heartbeats</div>
+                    <div class="stat-value" id="heartbeats-val">0</div>
+                    <div class="stat-desc">Estimated heartbeats (~80/min)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red">🎂</div>
+                    <div class="stat-label">Next Birthday</div>
+                    <div class="stat-value" id="next-bday-val">0</div>
+                    <div class="stat-desc">Days until your next birthday</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow">🌅</div>
+                    <div class="stat-label">Weeks Lived</div>
+                    <div class="stat-value" id="weeks-val">0</div>
+                    <div class="stat-desc">Total weeks on Earth</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon indigo">🌙</div>
+                    <div class="stat-label">Full Moons</div>
+                    <div class="stat-value" id="moons-val">0</div>
+                    <div class="stat-desc">Full moons experienced</div>
+                </div>
+            </div>
+
+            <!-- Life Progress -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div>
+                        <div class="progress-title">Life Journey</div>
+                        <div class="progress-subtitle">Based on average global life expectancy (~73 years)</div>
+                    </div>
+                </div>
+                <div class="life-bar-container">
+                    <div class="life-bar" id="life-bar">
+                        <div class="life-bar-shine"></div>
+                    </div>
+                </div>
+                <div class="milestones">
+                    <div class="milestone">
+                        <div class="milestone-dot" id="milestone-0"></div>
+                        <div class="milestone-label">Birth</div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-dot" id="milestone-18"></div>
+                        <div class="milestone-label">18</div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-dot" id="milestone-30"></div>
+                        <div class="milestone-label">30</div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-dot" id="milestone-50"></div>
+                        <div class="milestone-label">50</div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-dot" id="milestone-73"></div>
+                        <div class="milestone-label">73</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fun Facts -->
+            <div class="fun-facts">
+                <h2 class="section-title">Your Time in Perspective</h2>
+                <div class="facts-grid">
+                    <div class="fact-card">
+                        <div class="fact-emoji">🌍</div>
+                        <div class="fact-content">
+                            <h4>Earth Rotations</h4>
+                            <p>You have experienced <span class="fact-number" id="earth-rot">0</span> full rotations of Earth.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">☀️</div>
+                        <div class="fact-content">
+                            <h4>Sun Orbits</h4>
+                            <p>Earth has orbited the Sun <span class="fact-number" id="sun-orbits">0</span> times since you were born.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">😴</div>
+                        <div class="fact-content">
+                            <h4>Time Asleep</h4>
+                            <p>You've spent roughly <span class="fact-number" id="sleep-hours">0</span> hours sleeping (~1/3 of life).</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">🍽️</div>
+                        <div class="fact-content">
+                            <h4>Meals Eaten</h4>
+                            <p>Approximately <span class="fact-number" id="meals-eaten">0</span> meals consumed in your lifetime.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">💨</div>
+                        <div class="fact-content">
+                            <h4>Breaths Taken</h4>
+                            <p>About <span class="fact-number" id="breaths-taken">0</span> breaths taken since birth.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">👁️</div>
+                        <div class="fact-content">
+                            <h4>Blinks</h4>
+                            <p>Your eyes have blinked roughly <span class="fact-number" id="blinks">0</span> times.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">🚶</div>
+                        <div class="fact-content">
+                            <h4>Steps Walked</h4>
+                            <p>Estimated <span class="fact-number" id="steps-walked">0</span> steps taken in your lifetime.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">📱</div>
+                        <div class="fact-content">
+                            <h4>Screen Time</h4>
+                            <p>If average, you've spent <span class="fact-number" id="screen-hours">0</span> hours on screens.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">💧</div>
+                        <div class="fact-content">
+                            <h4>Water Consumed</h4>
+                            <p>Approximately <span class="fact-number" id="water-liters">0</span> liters of water drank.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">🗣️</div>
+                        <div class="fact-content">
+                            <h4>Words Spoken</h4>
+                            <p>Estimated <span class="fact-number" id="words-spoken">0</span> words spoken in your lifetime.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">🎬</div>
+                        <div class="fact-content">
+                            <h4>Movies Watched</h4>
+                            <p>About <span class="fact-number" id="movies-watched">0</span> movies could have been watched.</p>
+                        </div>
+                    </div>
+                    <div class="fact-card">
+                        <div class="fact-emoji">✈️</div>
+                        <div class="fact-content">
+                            <h4>Distance Traveled</h4>
+                            <p>Earth has carried you <span class="fact-number" id="distance-km">0</span> km through space.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="contact-section">
+            <div class="contact-header">
+                <h2>Let's Work Together</h2>
+                <p>Have a project in mind? I'd love to hear about it. Let's create something amazing together.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-detail">
+                            <h4>Email</h4>
+                            <a href="mailto:ranmikakalhan17@gmail.com">ranmikakalhan17@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-detail">
+                            <h4>Location</h4>
+                            <p>Matara, Sri Lanka</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">💻</div>
+                        <div class="contact-detail">
+                            <h4>GitHub</h4>
+                            <a href="https://github.com/ranmika17" target="_blank">@ranmika17</a>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent! (Demo)');">
+                    <div class="form-group">
+                        <label for="contact-name">Name</label>
+                        <input type="text" id="contact-name" placeholder="Your name" required aria-label="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">Email</label>
+                        <input type="email" id="contact-email" placeholder="your@email.com" required aria-label="Your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-message">Message</label>
+                        <textarea id="contact-message" rows="4" placeholder="Tell me about your project..." required aria-label="Your message"></textarea>
+                    </div>
+                    <button type="submit" class="contact-submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Made with <span class="footer-heart">❤️</span> — Every moment counts</p>
+        </div>
+    </footer>
+
+    <script>
+        // Set max date to today
+        document.getElementById('dob').max = new Date().toISOString().split('T')[0];
+
+        // Mobile nav toggle
+        function toggleNav() {
+            document.getElementById('nav-links').classList.toggle('show');
+        }
+        function closeNav() {
+            document.getElementById('nav-links').classList.remove('show');
+        }
+
+        const zodiacSigns = [
+            { name: "Capricorn", icon: "♑", dates: "Dec 22 — Jan 19", traits: ["Ambitious", "Disciplined", "Patient"], explain: "Capricorns are known for their determination and practical approach to life. Ruled by Saturn, they value structure and long-term goals." },
+            { name: "Aquarius", icon: "♒", dates: "Jan 20 — Feb 18", traits: ["Independent", "Innovative", "Humanitarian"], explain: "Aquarians are forward-thinkers who march to their own beat. Ruled by Uranus, they are drawn to innovation and social causes." },
+            { name: "Pisces", icon: "♓", dates: "Feb 19 — Mar 20", traits: ["Compassionate", "Artistic", "Intuitive"], explain: "Pisces are deeply empathetic and creative souls. Ruled by Neptune, they possess strong intuition and artistic sensibilities." },
+            { name: "Aries", icon: "♈", dates: "Mar 21 — Apr 19", traits: ["Passionate", "Courageous", "Determined"], explain: "Aries are natural-born leaders full of fiery energy. Ruled by Mars, they are bold, competitive, and always ready for action." },
+            { name: "Taurus", icon: "♉", dates: "Apr 20 — May 20", traits: ["Reliable", "Patient", "Practical"], explain: "Taurus individuals are grounded and dependable. Ruled by Venus, they appreciate beauty, comfort, and stability in life." },
+            { name: "Gemini", icon: "♊", dates: "May 21 — Jun 20", traits: ["Adaptable", "Outgoing", "Intelligent"], explain: "Geminis are curious and versatile communicators. Ruled by Mercury, they thrive on variety and intellectual stimulation." },
+            { name: "Cancer", icon: "♋", dates: "Jun 21 — Jul 22", traits: ["Loyal", "Emotional", "Sympathetic"], explain: "Cancers are nurturing and deeply emotional. Ruled by the Moon, they value home, family, and meaningful connections." },
+            { name: "Leo", icon: "♌", dates: "Jul 23 — Aug 22", traits: ["Creative", "Passionate", "Generous"], explain: "Leos are confident and charismatic performers. Ruled by the Sun, they radiate warmth and love being in the spotlight." },
+            { name: "Virgo", icon: "♍", dates: "Aug 23 — Sep 22", traits: ["Analytical", "Kind", "Hardworking"], explain: "Virgos are meticulous and service-oriented. Ruled by Mercury, they excel at analysis and strive for perfection." },
+            { name: "Libra", icon: "♎", dates: "Sep 23 — Oct 22", traits: ["Diplomatic", "Gracious", "Fair-minded"], explain: "Libras seek balance and harmony in all things. Ruled by Venus, they are charming diplomats with a love for aesthetics." },
+            { name: "Scorpio", icon: "♏", dates: "Oct 23 — Nov 21", traits: ["Resourceful", "Brave", "Passionate"], explain: "Scorpios are intense and deeply perceptive. Ruled by Pluto, they possess magnetic energy and transformative power." },
+            { name: "Sagittarius", icon: "♐", dates: "Nov 22 — Dec 21", traits: ["Generous", "Idealistic", "Humorous"], explain: "Sagittarians are adventurous free spirits. Ruled by Jupiter, they are optimistic explorers always seeking new horizons." }
+        ];
+
+        function getZodiac(month, day) {
+            const cutoff = [19, 18, 20, 19, 20, 20, 22, 22, 22, 22, 21, 21];
+            return day > cutoff[month - 1] ? zodiacSigns[month % 12] : zodiacSigns[(month - 1 + 12) % 12];
+        }
+
+        function countLeapYears(year, month, day) {
+            let count = 0;
+            const startYear = year;
+            const endYear = new Date().getFullYear();
+            for (let y = startYear; y <= endYear; y++) {
+                if ((y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0)) {
+                    if (y > startYear || (y === startYear && month <= 2)) {
+                        if (y < endYear || (y === endYear && (month > 2 || (month === 2 && day <= 29)))) {
+                            count++;
+                        }
+                    }
+                }
+            }
+            return count;
+        }
+
+        function animateNumber(element, target, duration = 2000) {
+            const start = 0;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(start + (target - start) * easeOut);
+                
+                element.textContent = current.toLocaleString();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = target.toLocaleString();
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        function calculateLifespan() {
+            const dobInput = document.getElementById('dob');
+            const errorMsg = document.getElementById('error-msg');
+            const dob = new Date(dobInput.value);
+            
+            if (!dobInput.value || isNaN(dob.getTime()) || dob > new Date()) {
+                errorMsg.classList.add('show');
+                dobInput.style.borderColor = '#ef4444';
+                dobInput.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.3)';
+                setTimeout(() => {
+                    errorMsg.classList.remove('show');
+                    dobInput.style.borderColor = '';
+                    dobInput.style.boxShadow = '';
+                }, 3000);
+                return;
+            }
+
+            errorMsg.classList.remove('show');
+            dobInput.style.borderColor = '';
+            dobInput.style.boxShadow = '';
+
+            const now = new Date();
+            const diffMs = now - dob;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffMinutes = Math.floor(diffMs / (1000 * 60));
+            
+            let years = now.getFullYear() - dob.getFullYear();
+            let months = now.getMonth() - dob.getMonth();
+            let days = now.getDate() - dob.getDate();
+            if (days < 0) {
+                months--;
+                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            const totalMonths = years * 12 + months;
+            
+            let nextBday = new Date(now.getFullYear(), dob.getMonth(), dob.getDate());
+            if (nextBday < now) {
+                nextBday.setFullYear(nextBday.getFullYear() + 1);
+            }
+            const daysToBday = Math.ceil((nextBday - now) / (1000 * 60 * 60 * 24));
+            
+            const heartbeats = diffMinutes * 80;
+            const weeks = Math.floor(diffDays / 7);
+            const moons = Math.floor(diffDays / 29.53);
+            
+            const zodiac = getZodiac(dob.getMonth() + 1, dob.getDate());
+            document.getElementById('zodiac-icon').textContent = zodiac.icon;
+            document.getElementById('zodiac-name').textContent = zodiac.name;
+            document.getElementById('zodiac-dates').textContent = zodiac.dates;
+            document.getElementById('zodiac-explain').textContent = zodiac.explain;
+            document.getElementById('zodiac-traits').innerHTML = zodiac.traits.map(t => `<span class="zodiac-trait">${t}</span>`).join('');
+
+            document.getElementById('exact-age').textContent = `${years} years, ${months} months, ${days} days`;
+
+            const resultsSection = document.getElementById('results');
+            resultsSection.classList.add('active');
+
+            animateNumber(document.getElementById('days-counter'), diffDays, 2500);
+
+            setTimeout(() => {
+                animateNumber(document.getElementById('qs-years'), years, 1500);
+                animateNumber(document.getElementById('qs-months'), totalMonths, 1500);
+                animateNumber(document.getElementById('qs-weeks'), weeks, 1500);
+                animateNumber(document.getElementById('qs-hours'), diffHours, 1800);
+                animateNumber(document.getElementById('qs-minutes'), diffMinutes, 2000);
+            }, 300);
+
+            setTimeout(() => {
+                document.querySelectorAll('.quick-stat').forEach((card, i) => {
+                    setTimeout(() => card.classList.add('visible'), i * 80);
+                });
+            }, 200);
+
+            setTimeout(() => animateNumber(document.getElementById('years-val'), years, 1500), 600);
+            setTimeout(() => animateNumber(document.getElementById('months-val'), totalMonths, 1500), 750);
+            setTimeout(() => animateNumber(document.getElementById('hours-val'), diffHours, 1800), 900);
+            setTimeout(() => animateNumber(document.getElementById('minutes-val'), diffMinutes, 2000), 1050);
+            setTimeout(() => animateNumber(document.getElementById('heartbeats-val'), heartbeats, 2200), 1200);
+            setTimeout(() => animateNumber(document.getElementById('next-bday-val'), daysToBday, 1200), 1350);
+            setTimeout(() => animateNumber(document.getElementById('weeks-val'), weeks, 1500), 1500);
+            setTimeout(() => animateNumber(document.getElementById('moons-val'), moons, 1500), 1650);
+
+            setTimeout(() => {
+                document.querySelectorAll('.stat-card').forEach((card, i) => {
+                    setTimeout(() => card.classList.add('visible'), i * 100);
+                });
+            }, 700);
+
+            const lifeExpectancy = 73;
+            const lifePercent = Math.min((years / lifeExpectancy) * 100, 100);
+            setTimeout(() => {
+                document.getElementById('life-bar').style.width = lifePercent + '%';
+            }, 900);
+
+            const milestones = [0, 18, 30, 50, 73];
+            milestones.forEach(m => {
+                if (years >= m) {
+                    document.getElementById('milestone-' + m).classList.add('active');
+                }
+            });
+
+            const earthRotations = diffDays;
+            const sunOrbits = years;
+            const sleepHours = Math.floor(diffHours * 0.33);
+            const mealsEaten = diffDays * 3;
+            const breathsTaken = diffMinutes * 16;
+            const blinks = diffMinutes * 15;
+            const stepsWalked = diffDays * 7000;
+            const screenHours = Math.floor(diffHours * 0.08);
+            const waterLiters = Math.floor(diffDays * 2.5);
+            const wordsSpoken = diffDays * 7000;
+            const moviesWatched = Math.floor(diffHours / 2);
+            const distanceKm = Math.floor(diffDays * 2570000);
+
+            setTimeout(() => {
+                animateNumber(document.getElementById('earth-rot'), earthRotations, 2000);
+                animateNumber(document.getElementById('sun-orbits'), sunOrbits, 1500);
+                animateNumber(document.getElementById('sleep-hours'), sleepHours, 2000);
+                animateNumber(document.getElementById('meals-eaten'), mealsEaten, 2200);
+                animateNumber(document.getElementById('breaths-taken'), breathsTaken, 2500);
+                animateNumber(document.getElementById('blinks'), blinks, 2500);
+                animateNumber(document.getElementById('steps-walked'), stepsWalked, 2500);
+                animateNumber(document.getElementById('screen-hours'), screenHours, 2000);
+                animateNumber(document.getElementById('water-liters'), waterLiters, 2000);
+                animateNumber(document.getElementById('words-spoken'), wordsSpoken, 2500);
+                animateNumber(document.getElementById('movies-watched'), moviesWatched, 2000);
+                animateNumber(document.getElementById('distance-km'), distanceKm, 2500);
+            }, 1600);
+
+            setTimeout(() => {
+                document.querySelectorAll('.fact-card').forEach((card, i) => {
+                    setTimeout(() => card.classList.add('visible'), i * 80);
+                });
+            }, 1800);
+
+            setTimeout(() => {
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        document.getElementById('dob').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateLifespan();
+            }
+        });
+                // Live updating counters
+        let liveInterval = null;
+        
+        function startLiveCounters(dob) {
+            if (liveInterval) clearInterval(liveInterval);
+            
+            function updateLive() {
+                const now = new Date();
+                const diffMs = now - dob;
+                const diffSeconds = Math.floor(diffMs / 1000);
+                const diffMinutes = Math.floor(diffMs / (1000 * 60));
+                const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                
+                // Update quick stats live
+                const qsMinutes = document.getElementById('qs-minutes');
+                const qsHours = document.getElementById('qs-hours');
+                if (qsMinutes) qsMinutes.textContent = diffMinutes.toLocaleString();
+                if (qsHours) qsHours.textContent = diffHours.toLocaleString();
+                
+                // Update main counter (seconds precision)
+                const counterVal = document.getElementById('days-counter');
+                if (counterVal && counterVal.dataset.animated === 'true') {
+                    const diffDays = (diffMs / (1000 * 60 * 60 * 24)).toFixed(6);
+                    counterVal.textContent = diffDays;
+                }
+            }
+            
+            updateLive();
+            liveInterval = setInterval(updateLive, 1000);
+        }
+                // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            document.getElementById('theme-toggle').textContent = next === 'light' ? '☀️' : '🌙';
+        }
+
+        // Load saved theme
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                document.getElementById('theme-toggle').textContent = '☀️';
+            }
+        })();
+    </script>
+</body>
+</html>
